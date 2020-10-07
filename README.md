@@ -1,4 +1,12 @@
-A react app that uploads files to S3.
+A react app that uploads files to S3. 
+
+Add an .env.local file with the following properties to the root directory. Make sure it is in .gitignore.
+
+ACCESS_KEY_ID="..."
+
+SECRET_ACCESS_KEY="..."
+
+AWS_BUCKET="..."
 
 ## Available Scripts
 
