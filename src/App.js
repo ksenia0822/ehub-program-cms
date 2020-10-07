@@ -1,26 +1,81 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, {Component} from 'react';
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+import axios from 'axios';
+class App extends Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      success : false,
+      url : ""
+    }
+  }
 
+  handleChange = (ev) => {
+    this.setState({success: false, url : ""});
+
+  };
+
+    // Perform the upload
+    handleUpload = (ev) => {
+        let file = this.uploadInput.files[0];
+        // Split the filename to get the name and type
+        let fileParts = this.uploadInput.files[0].name.split('.');
+        let fileName = fileParts[0];
+        let fileType = fileParts[1];
+        console.log("Preparing the upload");
+
+        //this.callBackendAPI().then(r => console.log(r))
+
+        axios.post("http://localhost:3001/sign_s3", {
+            fileName : fileName,
+            fileType : fileType
+        })
+            .then(response => {
+                var returnData = response.data.data.returnData;
+                var signedRequest = returnData.signedRequest;
+                var url = returnData.url;
+                this.setState({url: url})
+                console.log("Received a signed request " + signedRequest);
+
+                // Put the fileType in the headers for the upload
+                var options = {
+                    headers: {
+                        'Content-Type': fileType,
+                        'Origin': 'unsafe-url'
+                    }
+                };
+                axios.put(signedRequest, file, options)
+                    .then(result => {
+                        console.log("Response from s3")
+                        this.setState({success: true});
+                    })
+                    .catch(error => {
+                        alert("ERROR " + JSON.stringify(error));
+                    })
+            })
+            .catch(error => {
+                alert(JSON.stringify(error));
+            })
+    };
+
+  render() {
+    const Success_message = () => (
+        <div style={{padding:50}}>
+          <h3 style={{color: 'green'}}>SUCCESSFUL UPLOAD</h3>
+          <a href={this.state.url}>Access the file here</a>
+          <br/>
+        </div>
+    );
+    return (
+        <div className="App">
+            <p>Upload header image:</p>
+            {this.state.success ? <Success_message/> : null}
+            <input onChange={this.handleChange} ref={(ref) => { this.uploadInput = ref; }} type="file"/>
+            <br/>
+            <button onClick={this.handleUpload}>upload</button>
+        </div>
+    );
+  }
+}
 export default App;
