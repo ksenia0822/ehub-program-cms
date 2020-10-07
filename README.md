@@ -1,6 +1,6 @@
 A react app that uploads files to S3. 
 
-Add an .env.local file with the following properties to the root directory. Make sure it is in .gitignore.
+Add an .env file with the following properties to the root directory. Make sure it is in .gitignore.
 
 ACCESS_KEY_ID="..."
 
