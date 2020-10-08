@@ -11,13 +11,13 @@ class App extends Component {
     }
   }
 
-  handleChange = (ev) => {
+  handleChange = () => {
     this.setState({success: false, url : ""});
 
   };
 
     // Perform the upload
-    handleUpload = (ev) => {
+    handleUpload = () => {
         let file = this.uploadInput.files[0];
         // Split the filename to get the name and type
         let fileParts = this.uploadInput.files[0].name.split('.');
@@ -35,23 +35,22 @@ class App extends Component {
                 var returnData = response.data.data.returnData;
                 var signedRequest = returnData.signedRequest;
                 var url = returnData.url;
-                this.setState({url: url})
+                this.setState({url: url});
                 console.log("Received a signed request " + signedRequest);
 
                 // Put the fileType in the headers for the upload
                 var options = {
                     headers: {
-                        'Content-Type': fileType,
-                        'Origin': 'unsafe-url'
+                        'Content-Type': fileType
                     }
                 };
                 axios.put(signedRequest, file, options)
                     .then(result => {
-                        console.log("Response from s3")
+                        console.log("Response from s3:", result);
                         this.setState({success: true});
                     })
                     .catch(error => {
-                        alert("ERROR " + JSON.stringify(error));
+                        alert("ERROR " + error);
                     })
             })
             .catch(error => {
