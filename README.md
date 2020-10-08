@@ -2,11 +2,13 @@ A react app that uploads files to S3.
 
 Add an .env file with the following properties to the root directory. Make sure it is in .gitignore.
 
-ACCESS_KEY_ID="..."
+AWS_ACCESS_KEY_ID="..."
 
-SECRET_ACCESS_KEY="..."
+AWS_SECRET_ACCESS_KEY="..."
 
-AWS_BUCKET="..."
+AWS_AWS_BUCKET="..."
+
+AWS_REGION="..."
 
 ## Available Scripts
 
