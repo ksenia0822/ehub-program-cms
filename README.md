@@ -10,6 +10,10 @@ AWS_AWS_BUCKET="..."
 
 AWS_REGION="..."
 
+You need to run chrome with --disable-web-security on dev machine, on MAC the command is 
+
+open -n -a /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --args --user-data-dir="/tmp/chrome_dev_test" --disable-web-security
+
 ## Available Scripts
 
 In the project directory, you can run:
